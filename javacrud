@@ -1,0 +1,82 @@
+import java.sql.*;
+import java.util.*;
+//import java.util.String.*;
+class JdbcCrud
+{
+	static ResultSet rs;
+	static Statement st;
+	static Scanner sc = new Scanner(System.in);
+	public static void main(String... ss)
+	{
+		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		String userid = "system";
+		String password = "mca6";
+		try
+		{
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection(url,userid,password);
+			st = con.createStatement();
+			Display();
+			System.out.println("Enter your Choice");
+			System.out.println("1 -> for Insert \n2 -> for Display \n3 -> for Update \n4 -> for Delete");
+			int c = sc.nextInt();
+			System.out.println(c);
+			switch(c)
+			{
+				case 1:
+						insertRecord();
+					break;
+				case 2:
+						Display();
+					break;
+				case 3:
+						updateRecord();
+					break;
+				case 4:
+						deleteRecord();
+					break;
+				default :
+					System.out.println("Invalid Input");
+			}
+			//insertRecord();
+			//updateRecord();
+			//deleteRecord();
+			//Display();
+		}
+		catch(Exception i)
+		{
+			System.out.println(i);
+		}
+	}
+	public static void Display() throws SQLException
+	{
+		    rs = st.executeQuery("select * from emp101");
+			while(rs.next())
+			{
+				System.out.print(rs.getString(1)+"\t"+rs.getString(2));
+				System.out.println();
+			}
+	}
+	static void insertRecord()throws SQLException
+	{
+		System.out.println("Enter the Name");
+		String t1 = sc.nextLine();
+		System.out.println("Enter the password");
+		String t2 = sc.nextLine();
+		int a = st.executeUpdate("insert into emp101 values('"+t1+"','"+t2+"')");
+	}
+	static void updateRecord() throws SQLException
+	{
+		System.out.println("Enter the id of row which want to Delete");
+		String t4 = sc.nextLine();
+		System.out.println("Enter the new name for update");
+		String z = sc.nextLine();
+		int a = st.executeUpdate("update emp101 set name= "+z+" where pass= "+t4+"");
+	}
+	static void deleteRecord() throws SQLException
+	{
+		System.out.println("Enter the name of row which want to Delete");
+		String t5 = sc.nextLine();
+		int a=st.executeUpdate("delete from emp101 where name='"+t5+"'");
+	}
+}
